@@ -1,0 +1,183 @@
+<?xml version="1.0" ?>
+<root>
+	<connection group="left_top_bat_4" name="con_turret_laser_l_left_top_bat_4_1" tags="turret large standard ">
+		<offset>
+			<position x="-486.26189999999997" y="206.988" z="208.379"/>
+			<rotation pitch="1.047242" roll="-6.339522" yaw="177.1847"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_1" name="con_turret_laser_l_left_down_bat_1_1" tags="turret large standard ">
+		<offset>
+			<position x="-134.35580000000002" y="77.04565" z="769.4531"/>
+			<rotation pitch="11.79651" roll="-175.7099" yaw="-41.84002"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_4" name="con_turret_laser_l_left_top_bat_4_2" tags="turret large standard ">
+		<offset>
+			<position x="-481.1223" y="204.6389" z="121.262"/>
+			<rotation pitch="2.048247" roll="-6.220998" yaw="177.1815"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_1" name="con_turret_laser_l_left_down_bat_1_2" tags="turret large standard ">
+		<offset>
+			<position x="-194.5016" y="72.22305999999999" z="715.9805"/>
+			<rotation pitch="11.5383" roll="-177.3566" yaw="-42.17752"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_1" name="con_turret_laser_l_left_down_bat_1_3" tags="turret large standard ">
+		<offset>
+			<position x="-252.9087" y="70.22123" z="663.3627"/>
+			<rotation pitch="11.46421" roll="-179.7103" yaw="-42.65537"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_2" name="con_turret_laser_l_left_down_bat_2_3" tags="turret large standard ">
+		<offset>
+			<position x="-302.4806" y="49.15264" z="389.51259999999996"/>
+			<rotation pitch="7.487344" roll="175.9691" yaw="-43.39287"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_2" name="con_turret_laser_l_left_down_bat_2_2" tags="turret large standard ">
+		<offset>
+			<position x="-301.2262" y="55.13874" z="479.41859999999997"/>
+			<rotation pitch="9.135073" roll="177.4316" yaw="-43.07051"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_2" name="con_turret_laser_l_left_down_bat_2_1" tags="turret large standard ">
+		<offset>
+			<position x="-298.86339999999996" y="64.06606000000001" z="571.3649"/>
+			<rotation pitch="9.825318" roll="178.6027" yaw="-42.96807"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_3" name="con_turret_laser_l_left_down_bat_3_1" tags="turret large standard ">
+		<offset>
+			<position x="-375.5094" y="59.493660000000006" z="309.1392"/>
+			<rotation pitch="8.330627" roll="171.563" yaw="-44.11425"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_3" name="con_turret_laser_l_left_down_bat_3_2" tags="turret large standard ">
+		<offset>
+			<position x="-378.3783" y="62.50170000000001" z="211.7073"/>
+			<rotation pitch="6.016558" roll="168.7755" yaw="-44.19177"/>
+		</offset>
+	</connection>
+	<connection group="left_down_bat_3" name="con_turret_laser_l_left_down_bat_3_3" tags="turret large standard ">
+		<offset>
+			<position x="-380.6" y="71.92792" z="116.1892"/>
+			<rotation pitch="2.976714" roll="167.3087" yaw="-44.39169"/>
+		</offset>
+	</connection>
+	<connection group="left_side_bat_1" name="con_turret_laser_l_left_side_bat_1_1" tags="turret large standard ">
+		<offset>
+			<position x="-73.29309" y="-49.982169999999996" z="436.8275"/>
+			<rotation pitch="0.1461474" roll="97.9669" yaw="5.249129"/>
+		</offset>
+	</connection>
+	<connection group="left_side_bat_1" name="con_turret_laser_l_left_side_bat_1_2" tags="turret large standard ">
+		<offset>
+			<position x="-62.041880000000006" y="-132.9898" z="492.82950000000005"/>
+			<rotation pitch="-1.607968" roll="91.0941" yaw="7.341284"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_5" name="con_turret_laser_l_left_top_bat_5_1" tags="turret large standard ">
+		<offset>
+			<position x="-165.6736" y="272.8506" z="345.1985"/>
+			<rotation pitch="-9.850363" roll="0.2293607" yaw="-75.18822"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_3" name="con_turret_laser_l_left_top_bat_3_3" tags="turret large standard ">
+		<offset>
+			<position x="-440.0931" y="213.8849" z="329.77840000000003"/>
+			<rotation pitch="-6.28304" roll="2.520511" yaw="-75.50799"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_3" name="con_turret_laser_l_left_top_bat_3_2" tags="turret large standard ">
+		<offset>
+			<position x="-421.8621" y="216.57350000000002" z="399.3412"/>
+			<rotation pitch="-6.129959" roll="1.817339" yaw="-75.43221"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_3" name="con_turret_laser_l_left_top_bat_3_1" tags="turret large standard ">
+		<offset>
+			<position x="-402.87480000000005" y="218.5711" z="472.0034"/>
+			<rotation pitch="-6.194688" roll="1.366818" yaw="-75.38365"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_2" name="con_turret_laser_l_left_top_bat_2_1" tags="turret large standard ">
+		<offset>
+			<position x="-275.1678" y="224.6945" z="685.7275999999999"/>
+			<rotation pitch="-5.546024" roll="-0.2340585" yaw="-51.43343"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_2" name="con_turret_laser_l_left_top_bat_2_2" tags="turret large standard ">
+		<offset>
+			<position x="-322.97929999999997" y="223.3568" z="625.5597"/>
+			<rotation pitch="-6.173113" roll="1.854325" yaw="-51.60193"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_2" name="con_turret_laser_l_left_top_bat_2_4" tags="turret large standard ">
+		<offset>
+			<position x="-443.2638" y="206.6805" z="678.0412"/>
+			<rotation pitch="-9.495343" roll="1.291193" yaw="-58.72086"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_2" name="con_turret_laser_l_left_top_bat_2_3" tags="turret large standard ">
+		<offset>
+			<position x="-400.8268" y="208.1143" z="747.9914"/>
+			<rotation pitch="-9.504472" roll="0.4420573" yaw="-58.69442"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_1" name="con_turret_laser_l_left_top_bat_1_3" tags="turret large standard ">
+		<offset>
+			<position x="-46.259479999999996" y="229.74169999999998" z="800.2"/>
+			<rotation pitch="-4.08165" roll="0.07368242" yaw="-9.689417"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_1" name="con_turret_laser_l_left_top_bat_1_4" tags="turret large standard ">
+		<offset>
+			<position x="-151.037" y="227.98989999999998" z="769.9150000000001"/>
+			<rotation pitch="-4.363733" roll="1.908912" yaw="-19.73608"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_1" name="con_turret_laser_l_left_top_bat_1_2" tags="turret large standard ">
+		<offset>
+			<position x="-205.8594" y="212.4387" z="922.7159"/>
+			<rotation pitch="-7.497945" roll="1.820197" yaw="-19.72686"/>
+		</offset>
+	</connection>
+	<connection group="left_top_bat_1" name="con_turret_laser_l_left_top_bat_1_1" tags="turret large standard ">
+		<offset>
+			<position x="-73.49457000000001" y="215.07510000000002" z="960.3847"/>
+			<rotation pitch="-6.764668" roll="0.3172693" yaw="-9.729317"/>
+		</offset>
+	</connection>
+	<connection group="_bat_t" name="con_turret_laser_l_detail_xl_barrelXlod0" tags="turret large standard ">
+		<offset>
+			<position x="-0.0" y="0.0" z="-0.0"/>
+			<rotation pitch="0.0" roll="0.0" yaw="-0.0"/>
+		</offset>
+	</connection>
+	<connection group="_bat_t" name="con_turret_laser_l_fx_barrel_decal" tags="turret large standard ">
+		<offset>
+			<position x="8.24768e-06" y="-244.903" z="-254.214"/>
+			<rotation pitch="0.0" roll="0.0" yaw="-0.0"/>
+		</offset>
+	</connection>
+	<connection group="_bat_t" name="con_turret_laser_l_fx_barrel_decalXlod0" tags="turret large standard ">
+		<offset>
+			<position x="7.10543e-13" y="0.0" z="-0.0"/>
+			<rotation pitch="0.0" roll="0.0" yaw="-0.0"/>
+		</offset>
+	</connection>
+	<connection group="_bat_t" name="con_turret_laser_l_fx_gun_decals" tags="turret large standard ">
+		<offset>
+			<position x="-0.0" y="432.606" z="-263.306"/>
+			<rotation pitch="0.0" roll="0.0" yaw="-0.0"/>
+		</offset>
+	</connection>
+	<connection group="_bat_t" name="con_turret_laser_l_fx_gun_decalsXlod0" tags="turret large standard ">
+		<offset>
+			<position x="-0.0" y="0.0" z="-0.0"/>
+			<rotation pitch="0.0" roll="0.0" yaw="-0.0"/>
+		</offset>
+	</connection>
+</root>
