@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ET
 from xml.dom.minidom import parse, parseString
 from pyquaternion import Quaternion as quat
+import naming as name
 
 def parsex3d(node):
     id = node.get('DEF').replace('_ifs_TRANSFORM','')
@@ -14,24 +15,14 @@ def parsex3d(node):
     return id, x, y, z, rot
 
 def construct(temp_root, id, x, y, z, q):
-    id = "con_turret_laser_l_" + id
-    nr = id.find("_bat_")
-    groupnr = id[nr + 5]
-    grouploc = ""
-    if "left" in id:
-        grouploc = "left"
-    elif "right" in id:
-        grouploc = "right"
-    elif "center" in id:
-        grouploc = "center"
-    if "down" in id:
-        grouploc = grouploc + "_down"
-    elif "top" in id:
-        grouploc = grouploc + "_top"
-    if "side" in id:
-        grouploc = grouploc + "_side"
-    group = grouploc + "_bat_" + groupnr
-    connection = ET.SubElement(temp_root, "connection", name=id, group=group, tags="turret large standard ")
+    id = id.split('_')
+    tags = name.tag_dict[id[1]]
+    conname = name.name_dict[id[1]]
+    nr = id[2]
+    group = id[0]
+    id = conname + "_" + id[0] + "-" + id[2]
+
+    connection = ET.SubElement(temp_root, "connection", name=id, group=group, tags=tags)
     offset = ET.SubElement(connection, "offset")
     ET.SubElement(offset, "position", x=str(x), y=str(y), z=str(z))
     ET.SubElement(offset, "quaternion", qx=str(q[1]), qy=str(q[2]), qz=str(q[3]), qw=str(q[0]))
