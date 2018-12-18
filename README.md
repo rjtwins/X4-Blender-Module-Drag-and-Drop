@@ -1,11 +1,10 @@
 # dea-turret-translator
 input:
-DEA file
+X3D file
 output:
-conversion to connection schema with rotation.
 conversion to connection schema with quaternion.
 
 USE:
-Save DAE file as input.dae in root directory
+Save X3D file as input.x3d in root directory
 Run script.
 Profit.
