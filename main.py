@@ -48,11 +48,6 @@ mirrorx = True
 
 for node in root.iter('Transform'):
     id, x, y ,z, rot = parsex3d(node)
-    # print(id)
-    # print(rot)
-    # print(x)
-    # print(y)
-    # print(z)
     q = [0,0,0,0]
     try:
         q = quat(axis=[float(rot[0]), float(rot[1]), float(rot[2])], angle=float(rot[3]))
@@ -61,7 +56,6 @@ for node in root.iter('Transform'):
 
     #The inversing MUST be conditional to where the part is, keep a lookout for this
     q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
-
     construct(outputq, id, x, y, z, q)
 
     if not mirrorx or "center" in id or not ("left" in id or "right" in id):

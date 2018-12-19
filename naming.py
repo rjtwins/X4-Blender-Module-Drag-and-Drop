@@ -9,7 +9,7 @@ tag_dict =	{
   "ssturret": 	"turret small standard missile hittable",
   "xlshield": 	"extralarge shield hittable",
   "lshield": 	"large shield hittable",
-  "mshield": 	"medium shield",
+  "mshield": 	"medium shield hittable",
   "sshield": 	"small shield",
   "xlengine":	"engine extralarge",
   "lengine": 	"engine large",
