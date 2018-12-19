@@ -1,4 +1,4 @@
-# dea-turret-translator
+# X4-Blender-Module-Drag-and-Drop
 input:
 X3D file
 output:
