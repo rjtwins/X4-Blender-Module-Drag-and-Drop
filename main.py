@@ -56,7 +56,7 @@ for node in root.iter('Transform'):
 
     construct(outputq, id, x, y, z, q)
 
-    if not mirrorx or "center" in id:
+    if not mirrorx or "center" in id or not ("left" in id or "right" in id):
         continue
     id, x, q = xmirror(id, x, q)
     construct(outputq, id, x, y, z, q)
