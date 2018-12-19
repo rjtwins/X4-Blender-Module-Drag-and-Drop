@@ -48,11 +48,11 @@ mirrorx = True
 
 for node in root.iter('Transform'):
     id, x, y ,z, rot = parsex3d(node)
-    print(id)
-    print(rot)
-    print(x)
-    print(y)
-    print(z)
+    # print(id)
+    # print(rot)
+    # print(x)
+    # print(y)
+    # print(z)
     q = [0,0,0,0]
     try:
         q = quat(axis=[float(rot[0]), float(rot[1]), float(rot[2])], angle=float(rot[3]))
