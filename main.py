@@ -2,6 +2,33 @@ import xml.etree.ElementTree as ET
 from xml.dom.minidom import parse, parseString
 from pyquaternion import Quaternion as quat
 import naming as name
+import glob
+
+
+def make_tree(file):
+	tree = ET.parse(file)
+	root = tree.getroot()
+	output = ET.Element("root")
+
+	#bool to mirror or not
+	mirrorx = True
+
+	for node in root.iter('Transform'):
+	    id, x, y ,z, rot = parsex3d(node)
+	    q = [0,0,0,0]
+	    try:
+	        q = quat(axis=[float(rot[0]), float(rot[1]), float(rot[2])], angle=float(rot[3]))
+	    except ZeroDivisionError:
+	        q = [0,0,0,1]
+
+	    q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
+	    construct(output, id, x, y, z, q)
+
+	    if not mirrorx or "center" in id or not ("left" in id or "right" in id):
+	        continue
+	    id, x, q = xmirror(id, x, q)
+	    construct(output, id, x, y, z, q)
+	return output
 
 def parsex3d(node):
     id = node.get('DEF').replace('_ifs_TRANSFORM','')
@@ -14,7 +41,7 @@ def parsex3d(node):
     z = float(loc[1]) * -100
     return id, x, y, z, rot
 
-def construct(temp_root, id, x, y, z, q):
+def construct(output, id, x, y, z, q):
     id = id.split('_')
     tags = name.tag_dict[id[1]]
     conname = name.name_dict[id[1]]
@@ -22,7 +49,7 @@ def construct(temp_root, id, x, y, z, q):
     group = id[0]
     id = conname + "_" + id[0] + "-" + id[2]
 
-    connection = ET.SubElement(temp_root, "connection", name=id, group=group, tags=tags)
+    connection = ET.SubElement(output, "connection", name=id, group=group, tags=tags)
     offset = ET.SubElement(connection, "offset")
     ET.SubElement(offset, "position", x=str(x), y=str(y), z=str(z))
     ET.SubElement(offset, "quaternion", qx=str(q[1]), qy=str(q[2]), qz=str(q[3]), qw=str(q[0]))
@@ -38,37 +65,16 @@ def xmirror(id, x, q):
         id = id.replace("right", "left")
     return id, x, q
 
-tree = ET.parse('input.x3d')
-root = tree.getroot()
-outputr = ET.Element("root")
-outputq = ET.Element("root")
+files = glob.glob('./*.x3d')
 
-#bool to mirror or not
-mirrorx = True
-
-for node in root.iter('Transform'):
-    id, x, y ,z, rot = parsex3d(node)
-    q = [0,0,0,0]
-    try:
-        q = quat(axis=[float(rot[0]), float(rot[1]), float(rot[2])], angle=float(rot[3]))
-    except ZeroDivisionError:
-        q = [0,0,0,1]
-
-    #The inversing MUST be conditional to where the part is, keep a lookout for this
-    q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
-    construct(outputq, id, x, y, z, q)
-
-    if not mirrorx or "center" in id or not ("left" in id or "right" in id):
-        continue
-    id, x, q = xmirror(id, x, q)
-    construct(outputq, id, x, y, z, q)
-
-
-#Output for debugging
-tree_string = ET.tostring(outputq)
-xml = parseString(tree_string)
-pretty_xml_as_string = xml.toprettyxml()
-print(pretty_xml_as_string)
-file = open("output.xml","w+")
-file.write(pretty_xml_as_string)
-file.close()
+for file in files:
+	output = make_tree(file)
+	print(output)
+	outputfile = file[2:-4] + "_output.xml"
+	tree_string = ET.tostring(output)
+	xml = parseString(tree_string)
+	pretty_xml_as_string = xml.toprettyxml()
+	print(pretty_xml_as_string)
+	file = open(outputfile,"w+")
+	file.write(pretty_xml_as_string)
+	file.close()
