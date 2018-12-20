@@ -6,7 +6,7 @@ from glob import glob
 import ctypes
 
 
-#For EXE error handling
+#For EXE error handling and questions.
 def Mbox(title, text, style):
     return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
@@ -89,6 +89,11 @@ def xmirror(id, x, q):
 ##INIT##
 #Find all files with the right extension
 files = glob('./*.x3d')
+if Mbox("Start", "The following files where detected for input:\n" + "\n".join(files) +"\nDo you want to continue?", 4) == 7:
+	exit()
+
+if Mbox("Mirror", "Do you want to mirror left/right?", 4) == 7:
+	mirrorx = False
 
 #For each file with the right extension process, make a tree and generate output.
 #Store output in file with the origional name + _output.xml 
@@ -101,3 +106,4 @@ for file in files:
 	file = open(outputfile,"w+")
 	file.write(pretty_xml_as_string)
 	file.close()
+Mbox("Done", "", 1)
