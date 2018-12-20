@@ -2,17 +2,29 @@ import xml.etree.ElementTree as ET
 from xml.dom.minidom import parse, parseString
 from pyquaternion import Quaternion as quat
 import naming as name
-import glob
+from glob import glob
+import ctypes
 
 
+#For EXE error handling
+def Mbox(title, text, style):
+    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+
+#Read the input and generate connection nodes per read object.
 def make_tree(file):
+	#parse input xml (x3d)
 	tree = ET.parse(file)
+
+	#Generate xml for output
 	root = tree.getroot()
 	output = ET.Element("root")
 
 	#bool to mirror or not
 	mirrorx = True
 
+	#For each node in the input with the tag 'Transform' parse to get the name, location and rotation.
+	#Translate rotation to ingame view and construct a connection node for the output.
+	#Mirror if requested.
 	for node in root.iter('Transform'):
 	    id, x, y ,z, rot = parsex3d(node)
 	    q = [0,0,0,0]
@@ -30,6 +42,8 @@ def make_tree(file):
 	    construct(output, id, x, y, z, q)
 	return output
 
+#Parse a node from the input.
+#Read information from relervant atributes and transform the location to ingame view.
 def parsex3d(node):
     id = node.get('DEF').replace('_ifs_TRANSFORM','')
     loc = node.get('translation')
@@ -41,18 +55,25 @@ def parsex3d(node):
     z = float(loc[1]) * -100
     return id, x, y, z, rot
 
+#Construct the connection node for the output.
 def construct(output, id, x, y, z, q):
-    id = id.split('_')
-    tags = name.tag_dict[id[1]]
-    conname = name.name_dict[id[1]]
-    nr = id[2]
-    group = id[0]
-    id = conname + "_" + id[0] + "-" + id[2]
+	id = id.split('_')
+	try:
+		tags = name.tag_dict[id[1]]
+		conname = name.name_dict[id[1]]
+	except KeyError:
+		Mbox("Key Error", "There is something wrong with either your separation, or you are trying to use a module not supported yet."
+			"\nNaming convention: groupname_type_nr-in-group"
+			"\nExample: left-top-bat-1_lturret_1",0)
 
-    connection = ET.SubElement(output, "connection", name=id, group=group, tags=tags)
-    offset = ET.SubElement(connection, "offset")
-    ET.SubElement(offset, "position", x=str(x), y=str(y), z=str(z))
-    ET.SubElement(offset, "quaternion", qx=str(q[1]), qy=str(q[2]), qz=str(q[3]), qw=str(q[0]))
+	nr = id[2]
+	group = id[0]
+	id = conname + "_" + id[0] + "-" + id[2]
+
+	connection = ET.SubElement(output, "connection", name=id, group=group, tags=tags)
+	offset = ET.SubElement(connection, "offset")
+	ET.SubElement(offset, "position", x=str(x), y=str(y), z=str(z))
+	ET.SubElement(offset, "quaternion", qx=str(q[1]), qy=str(q[2]), qz=str(q[3]), qw=str(q[0]))
 
 def xmirror(id, x, q):
     #Mirror over x source : https://stackoverflow.com/questions/32438252/efficient-way-to-apply-mirror-effect-on-quaternion-rotation
@@ -65,16 +86,18 @@ def xmirror(id, x, q):
         id = id.replace("right", "left")
     return id, x, q
 
-files = glob.glob('./*.x3d')
+##INIT##
+#Find all files with the right extension
+files = glob('./*.x3d')
 
+#For each file with the right extension process, make a tree and generate output.
+#Store output in file with the origional name + _output.xml 
 for file in files:
 	output = make_tree(file)
-	print(output)
 	outputfile = file[2:-4] + "_output.xml"
 	tree_string = ET.tostring(output)
 	xml = parseString(tree_string)
 	pretty_xml_as_string = xml.toprettyxml()
-	print(pretty_xml_as_string)
 	file = open(outputfile,"w+")
 	file.write(pretty_xml_as_string)
 	file.close()
