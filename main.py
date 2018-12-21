@@ -118,13 +118,17 @@ class Main():
 
 		#Ships shield (shield for overal ship protection) need to NOT be in a group to count towards overal shiels.
 		if "nogroup" in group:
-			id = conname + "_" + id[0] + "-" + id[2]
+			id = conname + "_" + id[0] + "_" + id[2]
 			connection = ET.SubElement(output, "connection", name=id, tags=tags)
 		else:
-			id = conname + "_" + id[0] + "-" + id[2]
+			id = conname + "_" + id[0] + "_" + id[2]
 			connection = ET.SubElement(output, "connection", name=id, group=group, tags=tags)
 		offset = ET.SubElement(connection, "offset")
 		ET.SubElement(offset, "position", x=str(x), y=str(y), z=str(z))
+
+		#Engines CANNOT have an offset or they will just look 90deg down always
+		if "con_engine" in id:
+			return
 		ET.SubElement(offset, "quaternion", qx=str(q[1]), qy=str(q[2]), qz=str(q[3]), qw=str(q[0]))
 
 	def xmirror(self, id, x, q):
