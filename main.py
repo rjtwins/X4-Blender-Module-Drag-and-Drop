@@ -115,7 +115,7 @@ def construct(output, id, x, y, z, q):
 	group = id[0]
 
 	#Ships shield (shield for overal ship protection) need to NOT be in a group to count towards overal shiels.
-	if group == "ng":
+	if "nogroup" in group:
 		connection = ET.SubElement(output, "connection", name=id, tags=tags)
 		id = conname + "_" + id[0] + "-" + id[2]
 	else:
