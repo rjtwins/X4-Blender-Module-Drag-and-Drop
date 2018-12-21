@@ -103,6 +103,8 @@ class Main():
 	#Construct the connection node for the output.
 	def construct(self, output, id, x, y, z, q):
 		id = id.split('_')
+		tags = ""
+		conname = ""
 		try:
 			tags = name.tag_dict[id[1]]
 			conname = name.name_dict[id[1]]
@@ -116,11 +118,11 @@ class Main():
 
 		#Ships shield (shield for overal ship protection) need to NOT be in a group to count towards overal shiels.
 		if "nogroup" in group:
+			id = conname + "_" + id[0] + "-" + id[2]
 			connection = ET.SubElement(output, "connection", name=id, tags=tags)
-			id = conname + "_" + id[0] + "-" + id[2]
 		else:
-			connection = ET.SubElement(output, "connection", name=id, group=group, tags=tags)
 			id = conname + "_" + id[0] + "-" + id[2]
+			connection = ET.SubElement(output, "connection", name=id, group=group, tags=tags)
 		offset = ET.SubElement(connection, "offset")
 		ET.SubElement(offset, "position", x=str(x), y=str(y), z=str(z))
 		ET.SubElement(offset, "quaternion", qx=str(q[1]), qy=str(q[2]), qz=str(q[3]), qw=str(q[0]))
