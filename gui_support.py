@@ -85,8 +85,8 @@ def update_list_box():
         index = index + 1
 
 def select_files():
-    file_list = model.select_files()
-    if file_list == []:
+    result = model.select_files()
+    if file_list == 0:
         return
     update_list_box()
 

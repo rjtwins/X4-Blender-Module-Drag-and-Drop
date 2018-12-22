@@ -13,7 +13,6 @@ import connection as con
 # -3 Incorrect coordinates sceme supplied, either to many or to few.
 # -4 Incorrect rotation sceme supplied, either to many or to few.
 # -5 File we are tyring to inject to not found or no file selected.
-			# self.Mbox("ERROR", "File not found or no file selected.",1)
 
 
 #As I kept adding stuff to this it became uglier and uglier, but still I hope whoever reads this can enjoy the spagetti ball in all its glory.
@@ -31,6 +30,7 @@ class Main():
 		return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
 	def Error(self, code, file):
+		print("Error Code ", code, file)
 		error_codes = {
 			-1: "Incorrect number of element in component name.",
 			-2: "Element type not supported or error in element name.",
@@ -41,10 +41,11 @@ class Main():
 			-7: "The file you selected to inject into has no <connections></connections> node."
 		}
 		error = error_codes.get(code, "Error code not documented")
-		Mbox("ERROR", "Error Code %s\n%s in file %s" % (code, error, file))
+		self.Mbox("ERROR", "Error Code %s\n%s in file %s" % (code, error, file), 1)
 
 	def outputdialog(self, file, raw_xml):
 		xml = None
+		file = None
 		try:
 			file = filedialog.askopenfilename(title = "Select where to inject " + file,filetypes = [("XML Files", ".xml")])
 			result, xml = self.override_xml(file, raw_xml)
@@ -80,46 +81,49 @@ class Main():
 		#parse input xml (x3d)
 		tree = ET.parse(file)
 		root = tree.getroot()
-
 		#Generate xml for output
 		self.output = ET.Element("root")
-
+		
 		#For each node in the input with the tag 'Transform' parse to get the name, location and rotation.
 		#Translate rotation to ingame view and construct a connection node for the output.
 		#Mirror if requested.
 		for node in root.iter('Transform'):
-		    id, x, y ,z, rot = self.parsex3d(node)
-		    q = [0,0,0,0]
-		    try:
-		        q = quat(axis=[float(rot[0]), float(rot[1]), float(rot[2])], angle=float(rot[3]))
-		    except ZeroDivisionError:
-		        q = [0,0,0,1]
+			id, x, y ,z, rot = self.parsex3d(node)
+			q = [0,0,0,0]
+			try:
+			    q = quat(axis=[float(rot[0]), float(rot[1]), float(rot[2])], angle=float(rot[3]))
+			except ZeroDivisionError:
+			    q = [0,0,0,1]
 
-		    q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
+			q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
 
-		    #Create an X4 component connection object and connect it to the output.
-		    connection = con.Connection(id, [x,y,z], q)
-		    result = connection.generate()
-		    if result != 0:
-		    	return result
-		    result = connection.add_to(self.output)
-		    if result != 0:
-		    	return result
+			#Create an X4 component connection object and connect it to the output.
+			connection = con.Connection(id, [x,y,z], q)
+			result = connection.generate()
+			if result != 0:
+				return result
+			result = connection.add_to(self.output)
+			if result != 0:
+				return result
 
-		    if not mirror or "center" in id or not ("left" in id or "right" in id):
-		        continue
+			if not mirror:
+				continue
 
-		    #Mirror
-		    id, x, q = self.xmirror(id, x, q)
+			if 'center' in id:
+				continue
 
-		    connection = con.Connection(id, [x,y,z], q)
-		    result = connection.generate()
-		    if result != 0:
-		    	return result
-		    result = connection.add_to(output)
-		    if result != 0:
-		    	return result
-		    return 0
+			#Mirror
+			id, x, q = self.xmirror(id, x, q)
+
+			connection = con.Connection(id, [x,y,z], q)
+			result = connection.generate()
+			if result != 0:
+				return result
+			result = connection.add_to(self.output)
+			if result != 0:
+				return result
+		return 0
+
 
 	#Parse a node from the input.
 	#Read information from relervant atributes and transform the location to ingame view.
@@ -146,6 +150,7 @@ class Main():
 	    return id, x, q
 
 	def select_files(self):
+		self.file_list = []
 		read_files = filedialog.askopenfilenames(parent=self.root,title='Choose a file',filetypes=[("X3D Files", ".x3d")])
 
 		if len(read_files) == 0:
@@ -153,12 +158,13 @@ class Main():
 
 		for file in read_files:
 			self.file_list.append([file,[False,False]])
-		return self.file_list
+		return 0
 
 	def process(self):
 		#For each file with the right extension process, make a tree and generate output.
 		#Store output in file with the origional name + _output.xml 
 		for file_obj in self.file_list:
+			result = 0
 			file = file_obj[0]
 			mirror = file_obj[1][0]
 			inject = file_obj[1][1]
@@ -169,7 +175,6 @@ class Main():
 			xml = ""
 			file = file[2:-4]
 			file = file + "_output.xml"
-			result = 0
 			if inject:
 				result, temp_file, temp_xml = self.outputdialog(file, self.output)
 				if result != 0:
@@ -179,7 +184,7 @@ class Main():
 				xml = temp_xml
 			else:
 				#Gemerate output and cleanup output string.
-				xml = ET.tostring(output)
+				xml = ET.tostring(self.output)
 				xml = parseString(xml)
 				xml = xml.toprettyxml()
 				xml = xml.replace('</root>', "").replace('<root>', "").replace('<?xml version="1.0" ?>',"")
