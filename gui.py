@@ -20,6 +20,8 @@ except ImportError:
     py3 = True
 
 import gui_support
+import webbrowser
+
 
 def vp_start_gui():
     '''Starting point when module is the main routine.'''
@@ -76,53 +78,27 @@ class Module_drag_and_drop:
         self.Button1.configure(text='''Open Files''')
 
         self.Frame1 = Frame(top)
-        self.Frame1.place(relx=0.475, rely=0.025, relheight=0.956
-                , relwidth=0.506)
+        self.Frame1.place(relx=0.505, rely=0.413, relheight=0.181
+                , relwidth=0.411)
         self.Frame1.configure(relief=GROOVE)
         self.Frame1.configure(borderwidth="2")
         self.Frame1.configure(relief=GROOVE)
         self.Frame1.configure(background="#d9d9d9")
         self.Frame1.configure(highlightbackground="#d9d9d9")
         self.Frame1.configure(highlightcolor="black")
-        self.Frame1.configure(width=405)
+        self.Frame1.configure(width=195)
 
-        self.Message1 = Message(self.Frame1)
+        self.Message1 = Message(self.Frame1, cursor="hand2")
         self.Message1.place(relx=0.0, rely=0.007, relheight=0.98, relwidth=0.968)
 
-        self.Message1.configure(anchor=NW)
+        self.Message1.configure(anchor=N)
         self.Message1.configure(background="#d9d9d9")
-        self.Message1.configure(foreground="#000000")
+        self.Message1.configure(foreground="blue")
         self.Message1.configure(highlightbackground="#d9d9d9")
         self.Message1.configure(highlightcolor="black")
-        self.Message1.configure(text='''NAMING SCHEME:
-_ is used as separator never use _ outside of separating elements.
-
-groupname_type_nr-in-group
-
-groupname:
-Can be anything as long as it does not contain separators.
-
-type:
-Type of component (see list below for possibilities)
-
-nr:
-Nr. of component in group.
-
-OPTIONS:
-Include 'left' or 'right' in the group name if you potentially want your group to be mirrored.
-Include 'nogroup' no group will be assigned. This MUST be done for ship wide shields otherwise the shield will shield the components in the group only.
-
-Examples:
-left-top-bat-1_lturret_2
-let-nogroup_lshield_1
-
-INJECTION AND MIRRORING:
-Mirroring can be turned off and on in general or for each file or individually. Mirroring will be done over the left/right side.
-
-Injection is a feature were you can inject your connections into an excising ship file.
-Injection can be turned off and on in general or for each file or individually. When injecting is on user will be prompted what file to inject into.
-All new connections will be injected below the last connection in the selected file.''')
-        self.Message1.configure(width=392)
+        self.Message1.configure(text="Info and How To")
+        self.Message1.configure(width=100)
+        self.Message1.bind("<Button-1>", func=self.help_link)
 
         self.Label1 = Label(top)
         self.Label1.place(relx=0.038, rely=0.013, height=26, width=189)
@@ -136,14 +112,14 @@ All new connections will be injected below the last connection in the selected f
         self.Label1.configure(text='''Select Files to be processed''')
 
         self.Frame3 = Frame(top)
-        self.Frame3.place(relx=0.038, rely=0.1, relheight=0.306, relwidth=0.431)
+        self.Frame3.place(relx=0.063, rely=0.1, relheight=0.306, relwidth=0.853)
         self.Frame3.configure(relief=GROOVE)
         self.Frame3.configure(borderwidth="2")
         self.Frame3.configure(relief=GROOVE)
         self.Frame3.configure(background="#d9d9d9")
         self.Frame3.configure(highlightbackground="#d9d9d9")
         self.Frame3.configure(highlightcolor="black")
-        self.Frame3.configure(width=345)
+        self.Frame3.configure(width=405)
 
         self.file_list_box = Listbox(self.Frame3, selectmode=EXTENDED)
         self.file_list_box.place(relx=0.0, rely=0.0, relheight=1.0, relwidth=1.0)
@@ -156,7 +132,7 @@ All new connections will be injected below the last connection in the selected f
         self.file_list_box.configure(highlightcolor="black")
         self.file_list_box.configure(selectbackground="#c4c4c4")
         self.file_list_box.configure(selectforeground="black")
-        self.file_list_box.configure(width=345)
+        self.file_list_box.configure(width=405)
         self.file_list_box.configure(listvariable=gui_support.file_list)
         self.file_list_box.bind('<<ListboxSelect>>', self.onselect)
 
@@ -329,6 +305,9 @@ All new connections will be injected below the last connection in the selected f
         if now != self.current:
             gui_support.update_from_selection(now)
             self.current = now
+
+    def help_link(self, evt):
+        webbrowser.open_new(r"https://github.com/rjtwins/X4-Blender-Module-Drag-and-Drop/blob/master/README.md")
             
 if __name__ == '__main__':
     vp_start_gui()
