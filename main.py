@@ -30,48 +30,45 @@ class Main():
 	def Mbox(self, title, text, style):
 		return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
-	def Error(code, file):
+	def Error(self, code, file):
 		error_codes = {
 			-1: "Incorrect number of element in component name.",
 			-2: "Element type not supported or error in element name.",
 			-3: "Error in coordinate sceme.",
 			-4: "Incorrect number of rotational components.",
-			-5: "Failed to open file selected for injection or file not present."
+			-5: "Failed to open file selected for injection or file not present.",
+			-6:	"The file you selected to inject into could not be parsed.",
+			-7: "The file you selected to inject into has no <connections></connections> node."
 		}
-		error = error_codes.get(code, "Non tracable error")
+		error = error_codes.get(code, "Error code not documented")
 		Mbox("ERROR", "Error Code %s\n%s in file %s" % (code, error, file))
 
 	def outputdialog(self, file, raw_xml):
 		xml = None
 		try:
 			file = filedialog.askopenfilename(title = "Select where to inject " + file,filetypes = [("XML Files", ".xml")])
-			xml = self.override_xml(file, raw_xml)
+			result, xml = self.override_xml(file, raw_xml)
 		except FileNotFoundError:
 			return -5, "", ""
-		return file, xml
+		except ET.ParseError:
+			return -6, "", ""
+		except AttributeError:
+			return -7, "", ""
+		return 0, file, xml
 
-	#ow boy here we go
 	def override_xml(self, file, new_connections):
 		#tidy up new_connections cause ITS A MESS
 		new_connections = ET.tostring(new_connections)
 		new_connections = parseString(new_connections)
 		new_connections = new_connections.toprettyxml()
 		new_connections = ET.fromstring(new_connections)
-		xml = ""
-		try:
-			xml = ET.parse(file)
-		except ET.ParseError:
-			self.Mbox("ERROR",file + " could not be parsed and will be skipped.",1)
-			return xml
 
+		xml = ET.parse(file)
 		root = xml.getroot()
 		connections = root.find('component/connections')
-		try:
-			for child in new_connections:
-				connections.append(child)
-		except AttributeError:
-			self.Mbox("Error", "The file you selected to replace in,\n" + file + "\n has no <connections></connections> node.",1)
-			return ""
+
+		for child in new_connections:
+			connections.append(child)
 
 		xml = ET.tostring(root)
 		xml = parseString(xml)
@@ -167,7 +164,7 @@ class Main():
 			inject = file_obj[1][1]
 			result = self.make_tree(file, mirror)
 			if result != 0:
-				Error(result, file)
+				self.Error(result, file)
 				continue
 			xml = ""
 			file = file[2:-4]
@@ -176,7 +173,7 @@ class Main():
 			if inject:
 				result, temp_file, temp_xml = self.outputdialog(file, self.output)
 				if result != 0:
-					Error(result, file)
+					self.Error(result, file)
 					continue
 				file = temp_file
 				xml = temp_xml
