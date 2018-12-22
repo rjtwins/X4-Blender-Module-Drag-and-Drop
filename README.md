@@ -82,3 +82,14 @@ sengine
 counter (countermeasures)
 ```
 </details>
+
+### Requirements
+<details>
+  <summary>Click to expand</summary>
+  For exe users, none
+  For python users
+  
+    - Python 3.7 https://www.python.org/
+    - pyquaternion http://kieranwynn.github.io/pyquaternion/
+    
+</details>
