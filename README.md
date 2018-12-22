@@ -1,9 +1,11 @@
 # X4-Blender-Module-Drag-and-Drop
 
 Python script to enable drag and drop of hard-points in Blender (or any tool that can export to x3d) for X4 foundations.
-
 Egosoft forums link: https://forum.egosoft.com/viewtopic.php?f=181&t=409209
-
+### How To
+<details>
+  <summary>Click to expand</summary>
+  
   - Convert your XML to DAE (https://forum.egosoft.com/viewtopic.php?f=181&t=404786#p4769763)
   - Open your model in blender and start putting down your "hard-points" the script can mirror (will be querried when script is run) for you so you only need to do one side.
   - Rename hard-points according to the naming scheme so the script can recognize what you are putting down.
@@ -14,8 +16,13 @@ Egosoft forums link: https://forum.egosoft.com/viewtopic.php?f=181&t=409209
   - Press start.
   - If you are injecting you will be asked for each file into what file you want to inject. Injected xml code will be injected afther the last <connection></connection> elelment in the selected file.
   - If you are just outputting there will be %input%_output.xml files in the scipt root directory. Copy the content of this file over between <connections></connections> 
+  
+  </details>
 
 ### Limitation
+<details>
+  <summary>Click to expand</summary>
+  
 #### Engines:
   - Engines can only face backwards.
   - You can only ever have one engine size on each ship, aka no mixing of L and XL engines.
@@ -25,6 +32,8 @@ Egosoft forums link: https://forum.egosoft.com/viewtopic.php?f=181&t=409209
 
   - When in a group will only shield comonents in group and not the ship as a whole.
   - When not in a group will shield ship.
+  
+  </details>
   
 ### Naming Sceme
 <details>
