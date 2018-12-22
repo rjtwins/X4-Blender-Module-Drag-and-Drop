@@ -14,7 +14,8 @@ tag_dict =	{
   "xlengine":	"engine extralarge",
   "lengine": 	"engine large",
   "mengine": 	"engine medium",
-  "sengine": 	"engine small"
+  "sengine": 	"engine small",
+  "counter":  "countermeasures"
 }
 
 name_dict = {
@@ -31,5 +32,6 @@ name_dict = {
   "xlengine": 	"con_engine_xl",
   "lengine": 	"con_engine_l",
   "mengine": 	"con_engine_m",
-  "sengine": 	"con_engine_s"
+  "sengine": 	"con_engine_s",
+  "counter": "con_countermeasures"
 }

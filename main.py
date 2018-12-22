@@ -1,10 +1,20 @@
 import xml.etree.ElementTree as ET
 from xml.dom.minidom import parse, parseString
 from pyquaternion import Quaternion as quat
-import naming as name
 from glob import glob
 import ctypes
 from tkinter import filedialog, Tk, messagebox
+import connection as con
+
+
+# Error Handling via return codes
+# -1 Incorrect number of elements supplied, try and remove any special characters from your module names (. / @ * ect.)
+# -2 Element not supported, or error in element type name
+# -3 Incorrect coordinates sceme supplied, either to many or to few.
+# -4 Incorrect rotation sceme supplied, either to many or to few.
+# -5 File we are tyring to inject to not found or no file selected.
+			# self.Mbox("ERROR", "File not found or no file selected.",1)
+
 
 #As I kept adding stuff to this it became uglier and uglier, but still I hope whoever reads this can enjoy the spagetti ball in all its glory.
 class Main():
@@ -13,9 +23,23 @@ class Main():
 	file_list = []
 	file_selected = []
 
+	#Current output buffer
+	output = None
+
 	#For EXE error handling and questions.
 	def Mbox(self, title, text, style):
 		return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+
+	def Error(code, file):
+		error_codes = {
+			-1: "Incorrect number of element in component name.",
+			-2: "Element type not supported or error in element name.",
+			-3: "Error in coordinate sceme.",
+			-4: "Incorrect number of rotational components.",
+			-5: "Failed to open file selected for injection or file not present."
+		}
+		error = error_codes.get(code, "Non tracable error")
+		Mbox("ERROR", "Error Code %s\n%s in file %s" % (code, error, file))
 
 	def outputdialog(self, file, raw_xml):
 		xml = None
@@ -23,8 +47,7 @@ class Main():
 			file = filedialog.askopenfilename(title = "Select where to inject " + file,filetypes = [("XML Files", ".xml")])
 			xml = self.override_xml(file, raw_xml)
 		except FileNotFoundError:
-			self.Mbox("ERROR", "File not found or no file selected.",1)
-			
+			return -5, "", ""
 		return file, xml
 
 	#ow boy here we go
@@ -62,10 +85,7 @@ class Main():
 		root = tree.getroot()
 
 		#Generate xml for output
-		output = ET.Element("root")
-
-		#bool to mirror or not
-		mirrorx = True
+		self.output = ET.Element("root")
 
 		#For each node in the input with the tag 'Transform' parse to get the name, location and rotation.
 		#Translate rotation to ingame view and construct a connection node for the output.
@@ -79,13 +99,30 @@ class Main():
 		        q = [0,0,0,1]
 
 		    q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
-		    self.construct(output, id, x, y, z, q)
 
-		    if not mirror or not mirrorx or "center" in id or not ("left" in id or "right" in id):
+		    #Create an X4 component connection object and connect it to the output.
+		    connection = con.Connection(id, [x,y,z], q)
+		    result = connection.generate()
+		    if result != 0:
+		    	return result
+		    result = connection.add_to(self.output)
+		    if result != 0:
+		    	return result
+
+		    if not mirror or "center" in id or not ("left" in id or "right" in id):
 		        continue
+
+		    #Mirror
 		    id, x, q = self.xmirror(id, x, q)
-		    self.construct(output, id, x, y, z, q)
-		return output
+
+		    connection = con.Connection(id, [x,y,z], q)
+		    result = connection.generate()
+		    if result != 0:
+		    	return result
+		    result = connection.add_to(output)
+		    if result != 0:
+		    	return result
+		    return 0
 
 	#Parse a node from the input.
 	#Read information from relervant atributes and transform the location to ingame view.
@@ -99,37 +136,6 @@ class Main():
 	    y = float(loc[2]) * 100
 	    z = float(loc[1]) * -100
 	    return id, x, y, z, rot
-
-	#Construct the connection node for the output.
-	def construct(self, output, id, x, y, z, q):
-		id = id.split('_')
-		tags = ""
-		conname = ""
-		try:
-			tags = name.tag_dict[id[1]]
-			conname = name.name_dict[id[1]]
-		except KeyError:
-			self.Mbox("Key Error", "There is something wrong with either your separation, or you are trying to use a module not supported yet."
-				"\nNaming convention: groupname_type_nr-in-group"
-				"\nExample: left-top-bat-1_lturret_1",0)
-
-		nr = id[2]
-		group = id[0]
-
-		#Ships shield (shield for overal ship protection) need to NOT be in a group to count towards overal shiels.
-		if "nogroup" in group:
-			id = conname + "_" + id[0] + "_" + id[2]
-			connection = ET.SubElement(output, "connection", name=id, tags=tags)
-		else:
-			id = conname + "_" + id[0] + "_" + id[2]
-			connection = ET.SubElement(output, "connection", name=id, group=group, tags=tags)
-		offset = ET.SubElement(connection, "offset")
-		ET.SubElement(offset, "position", x=str(x), y=str(y), z=str(z))
-
-		#Engines CANNOT have an offset or they will just look 90deg down always
-		if "con_engine" in id:
-			return
-		ET.SubElement(offset, "quaternion", qx=str(q[1]), qy=str(q[2]), qz=str(q[3]), qw=str(q[0]))
 
 	def xmirror(self, id, x, q):
 	    #Mirror over x source : https://stackoverflow.com/questions/32438252/efficient-way-to-apply-mirror-effect-on-quaternion-rotation
@@ -159,18 +165,23 @@ class Main():
 			file = file_obj[0]
 			mirror = file_obj[1][0]
 			inject = file_obj[1][1]
-			output = self.make_tree(file, mirror)
-			rxml = ""
+			result = self.make_tree(file, mirror)
+			if result != 0:
+				Error(result, file)
+				continue
 			xml = ""
-			rfile = ""
 			file = file[2:-4]
 			file = file + "_output.xml"
+			result = 0
 			if inject:
-				rfile, rxml = self.outputdialog(file, output)
-			if not rxml == "":
-				xml = rxml
-				file = rfile
+				result, temp_file, temp_xml = self.outputdialog(file, self.output)
+				if result != 0:
+					Error(result, file)
+					continue
+				file = temp_file
+				xml = temp_xml
 			else:
+				#Gemerate output and cleanup output string.
 				xml = ET.tostring(output)
 				xml = parseString(xml)
 				xml = xml.toprettyxml()
@@ -180,3 +191,4 @@ class Main():
 			file.write(xml)
 			file.close()
 		self.Mbox("Done","",1)
+		return 0
