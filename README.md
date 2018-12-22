@@ -1,21 +1,12 @@
 # X4-Blender-Module-Drag-and-Drop
-Python script to enable drag and drop of hard-points in Blender (or any tool that can export to x3d).
-To be clear here, this is NOT a tool that allows you to modify ships and import them. Just their surface hard-points.
-If you want to import/export ships I suggest you goto: https://forum.egosoft.com/viewtopic.php?f=181&t=404786#p4769763 
-or search the forums as there are several topics on this. 
+Python script to enable drag and drop of hard-points in Blender (or any tool that can export to x3d) for X4 foundations.
 
-Also keep an eye on the version sinse its still regularly updated.
-
-[spoiler title=For python script users]The script is written in python 3.7 so you will need a python installation :
-
+For python users:
+The script is written in python 3.7 so you will need a python installation :
 https://www.python.org/
-
 As well as the pyquaternion module.
 
-If you have no idea what I'm talking about here I suggest you use the EXE instead.
-[/spoiler]
-
-[url=https://www.youtube.com/watch?v=b8-ie1u05Lw] Short video tutorial [/url] (OUTDATED)
+www.youtube.com/watch?v=b8-ie1u05Lw Short video tutorial(OUTDATED)
 
 How this works
 -Convert your XML to DAE (https://forum.egosoft.com/viewtopic.php?f=181&t=404786#p4769763)
