@@ -16,7 +16,7 @@ X4 Foundations nexus (zip outdated):https://www.nexusmods.com/x4foundations/mods
   - Select your input files and set their options as you like (mirror/inject)
   - Press start.
   - If you are injecting you will be asked for each file into what file you want to inject. Injected xml code will be injected afther the last <connection></connection> elelment in the selected file.
-  - If you are just outputting there will be %input%_output.xml files in the scipt root directory. Copy the content of this file over between <connections></connections> 
+  - If you are just outputting there will be %input%_output.xml files in the scipt root directory. Copy the content of this file over between ```<connections></connections>```
   
   </details>
 
