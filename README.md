@@ -46,16 +46,17 @@ Refrain from using sepcial characters like (@!#$%^&*.,) '-' is allowed.
 
 groupname_type_nr-in-group
 
-groupname			Name of the group, optional.
-type				Type of the component (see component list)
-nr					Nr. of component in group.
+groupname       Name of the group, optional.
+type            Type of the component (see component list)
+nr-in-group     Nr. of component in group.
 
 options:
 include 'left' or 'right' in your group name if you want the group to be mirrored.
 
 Examples:
 left-top-bat-1_lturret_2
-let-nogroup_lshield_1
+lshield_1
+medium-group-center_lshield_1
 funcannongroup-1_mturret_666
 ```
 </details>
