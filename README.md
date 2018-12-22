@@ -2,6 +2,7 @@
 
 Python script to enable drag and drop of hard-points in Blender (or any tool that can export to x3d) for X4 foundations.
 Egosoft forums: https://forum.egosoft.com/viewtopic.php?f=181&t=409209
+
 X4 Foundations nexus (zip outdated):https://www.nexusmods.com/x4foundations/mods/155/?tab=posts&jump_to_comment=66174131
 ### How To
 <details>
