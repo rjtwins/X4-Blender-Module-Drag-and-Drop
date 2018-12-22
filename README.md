@@ -25,10 +25,12 @@ Egosoft forums link: https://forum.egosoft.com/viewtopic.php?f=181&t=409209
 
   - When in a group will only shield comonents in group and not the ship as a whole.
   - When not in a group will shield ship.
-
+  
+### Naming Sceme
 <details>
-  <summary>### Naming Sceme</summary>
-```XML
+  <summary>Click to expand</summary>
+  
+```
 _ is used as separator do not use this outside of as stated below.
 Refrain from using sepcial characters like (@!#$%^&*.,) '-' is allowed.
 
@@ -47,8 +49,11 @@ let-nogroup_lshield_1
 funcannongroup-1_mturret_666
 ```
 </details>
-### Suported Modules
 
+### Suported Modules
+<details>
+  <summary>Click to expand</summary>
+  
 ```
 Supported modules (m indicates missile capable turret)
 lturret
@@ -67,3 +72,4 @@ mengine
 sengine
 counter (countermeasures)
 ```
+</details>
