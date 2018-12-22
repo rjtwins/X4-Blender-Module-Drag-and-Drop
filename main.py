@@ -45,7 +45,6 @@ class Main():
 
 	def outputdialog(self, file, raw_xml):
 		xml = None
-		file = None
 		try:
 			file = filedialog.askopenfilename(title = "Select where to inject " + file,filetypes = [("XML Files", ".xml")])
 			result, xml = self.override_xml(file, raw_xml)
@@ -74,7 +73,7 @@ class Main():
 		xml = ET.tostring(root)
 		xml = parseString(xml)
 		xml = xml.toxml()
-		return xml
+		return 0, xml
 
 	#Read the input and generate connection nodes per read object.
 	def make_tree(self, file, mirror):
