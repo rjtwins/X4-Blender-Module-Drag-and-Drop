@@ -42,7 +42,7 @@ X4 Foundations nexus (zip outdated):https://www.nexusmods.com/x4foundations/mods
   
 ```
 _ is used as separator do not use this outside of as stated below.
-Refrain from using special characters like (@!#$%^&*.,) '-' is allowed.
+Refrain from using special characters like ```(@!#$%^&*.,)```, '-' is allowed.
 
 groupname_type_nr-in-group
 
