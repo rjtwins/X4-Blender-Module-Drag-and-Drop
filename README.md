@@ -5,7 +5,7 @@ Python script to enable drag and drop of hard-points in Blender (or any tool tha
 Egosoft forums link: https://forum.egosoft.com/viewtopic.php?f=181&t=409209
 
   - Convert your XML to DAE (https://forum.egosoft.com/viewtopic.php?f=181&t=404786#p4769763)
-  - Open your model in blender and start putting down your "hard-points" the script can mirror (well be querried when script is run) for you so you only need to do one side.
+  - Open your model in blender and start putting down your "hard-points" the script can mirror (will be querried when script is run) for you so you only need to do one side.
   - Rename hard-points according to the naming scheme so the script can recognize what you are putting down.
   - Select all to be exported hard-points (you do not want to select the ship here) and select export to X3D.
   - In the export settings make sure have, y-forward, z-up and only "selection only" selected. If you are not using blender the axis might be different you will need to experiment to find out.
