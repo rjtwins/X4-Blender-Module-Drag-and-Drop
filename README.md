@@ -1,4 +1,4 @@
-# X4-Blender-Module-Drag-and-Drop
+# X4-Blender-Module-Drag-and-Drop V4
 
 Python script to enable drag and drop of hard-points in Blender (or any tool that can export to x3d) for X4 foundations.
 
