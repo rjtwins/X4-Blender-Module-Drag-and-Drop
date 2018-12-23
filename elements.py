@@ -1,6 +1,5 @@
 import naming as name
 import xml.etree.ElementTree as ET
-import element
 
 def gen_element(id, location, rotation):
 	if id == None:
@@ -12,28 +11,55 @@ def gen_element(id, location, rotation):
 
 	#what are we building ?
 	if 'waypoint' in id:
-		el = Waypoint(id, location)
+		el = Waypoint(id, location, rotation)
 	else:
 		el = Connection(id, location, rotation)
-	result = el.generate()
+	result = el.fill()
 	return result, el
 
 
 #Superclass for all elements
 class Element:
+	#Location in x,y,z
 	location 	= []
+	#rotation quat in w,x,y,z
 	rotation	= []
-	con_name	= None
-	con_type 	= None
-	con_nr 		= None
+	#connection name
+	con_name	= ""
+	#fully constructed name string
+	fullname 	= ""
+	#connection type (what surface element)
+	con_type	= ""
+	#how manied number of this element
+	con_nr		= ""
+	#Tags assgined to this element
+	tags 		= ""
+	#Element Tree object containing xml of element
 	element 	= None
-	id_full		= None
-	id_elements = None
+	#What kind of element is this ?
+	element_id	= "element"
+	#ID string
+	id 			= ""
+	#Split ID string
+	id_elements	= []
+
 
 	def __init__(self, id, location, rotation=None):
 		self.id = id
 		self.location = location
 		self.rotation = rotation
+
+	def fill(self):
+		result = self.generate()
+		if result != 0:
+			return result
+		result = self.process()
+		if result != 0:
+			return result
+		result = self.construct()
+		if result != 0:
+			return result
+		return 0
 
 	def generate(self):
 		self.id_elements = self.id.split('_')
@@ -54,14 +80,17 @@ class Element:
 
 	def construct(self):
 		self.fullname = '%s_%s' % (self.con_name, self.con_nr)
-		self.element = ET.Element("connection", name=self.fullname, tags=self.tags)
+		self.element = ET.Element(self.element_id, name=self.fullname, tags=self.tags)
 		ET.SubElement(self.element, "offset")
 		ET.SubElement(self.element.find('offset'), "position", x=str(self.location[0]), y=str(self.location[1]), z=str(self.location[2]))
+		if all([ v == 0 for v in self.rotation ]):
+			return 0
+		ET.SubElement(self.element.find('offset'), "quaternion", qx=str(self.rotation[1]), qy=str(self.rotation[2]), qz=str(self.rotation[3]), qw=str(self.rotation[0]))
 		return 0
 
 	def add_to(self, parent):
 		if parent == None or self.element == None:
-			return -1
+			return -9
 		parent.append(self.element)
 		return 0
 
@@ -70,9 +99,11 @@ class Element:
 		return self.element
 	def get_fullname(self):
 		return self.fullname
-		return self.group
 	def get_location(self):
 		return self.location
+
+	def print_obj_atribs(self):
+		print (', '.join("%s: %s" % item for item in vars(self).items()))
 
 class Connection(Element):
 	'''Contains a connection in all its forms and flavours.
@@ -84,11 +115,10 @@ class Connection(Element):
 	-3 Incorrect coordinates sceme supplied, either to many or to few.
 	-4 Incorrect rotation sceme supplied, either to many or to few.
 	'''
-	con_group 	= None
-	no_rot	 	= False
-	is_grouped 	= True
+	con_group = None
 	def __init__(self, id, location, rotation=None):
 		super().__init__(id, location, rotation)
+		self.element_id = "connection"
 		
 	def generate(self):
 		result = super().generate()
@@ -97,41 +127,60 @@ class Connection(Element):
 		try:
 			self.con_group = self.id_elements[-3]
 		except IndexError:
-			con_group = False
-		result = self.process()
-		if result != 0:
-			return result
-
-		result = self.construct()
-		if result != 0:
-			return result
+			con_group = None
 		return 0
 		
 	def process(self):
+		if 'engine' in self.con_type:
+			#TODO CONFIRM CORRECT ROTATION
+			self.rotation = [0,0,0,0]
 		result = super().process()
 		if result != 0:
 			return result
-
-		if 'engine' in self.con_type:
-			self.no_rot = True
-
 		return 0
 
 	def construct(self):
 		result = super().construct()
 		if result != 0:
 			return result
-
-		if self.is_grouped:
+		if self.con_group != None:
 			self.fullname = '%s_%s_%s' % (self.con_name, self.con_group, self.con_nr)
 			self.element.set('name', self.fullname)
 			self.element.set('group', self.con_group)
-
-		if self.no_rot:
-			return 0
-		ET.SubElement(self.element.find('offset'), "quaternion", qx=str(self.rotation[1]), qy=str(self.rotation[2]), qz=str(self.rotation[3]), qw=str(self.rotation[0]))
 		return 0
 
 class Waypoint(Element):
-	def test():
-		print("test")
+	#list of nr of other waypoints this waypoint is connected to.
+	links = []
+	def __init__(self, id, location, rotation):
+		super().__init__(id, location, rotation)
+		self.element_id = "waypoint"
+
+	#Waypoint will define links as type-linknr-linknr-linknr_waypointnr so split it up so we don't end up looking for the name for waypoint-1-12 in the dict.
+	def generate(self):
+		result = super().generate()
+		if result != 0:
+			return result
+		self.links = self.con_type.split('-')
+		self.con_type = self.links[0]
+		self.links = self.links[1:]
+		return 0
+
+	def construct(self):
+		self.fullname = '%s_%s' % (self.con_name, self.con_nr)
+		self.element = ET.Element(
+			self.element_id, 
+			name=self.fullname, 
+			tags=self.tags, 
+			x=str(self.location[0]), 
+			y=str(self.location[1]), 
+			z=str(self.location[2]),
+			qw=str(self.rotation[0]),
+			qx=str(self.rotation[1]),
+			qy=str(self.rotation[2]),
+			qz=str(self.rotation[3])
+			)
+		ET.SubElement(self.element, "links")
+		for link_nr in self.links:
+			ET.SubElement(self.element.find("links"), "link", ref="%s%s" % (self.con_name, link_nr))
+		return 0

@@ -29,6 +29,9 @@ class Main():
 	def Mbox(self, title, text, style):
 		return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
+	def print_obj_atribs(obj):
+		print (', '.join("%s: %s" % item for item in vars(obj).items()))
+
 	def Error(self, code, file):
 		print("Error Code ", code, file)
 		error_codes = {
@@ -40,6 +43,7 @@ class Main():
 			-6:	"The file you selected to inject into could not be parsed.",
 			-7: "The file you selected to inject into has no <connections></connections> node.",
 			-8: "Supplied object id was None.",
+			-9: "Constructed element is None or element trying to add to is None.",
 			-99: "Method faied to return or returned None."
 
 		}
@@ -96,7 +100,7 @@ class Main():
 			try:
 			    q = quat(axis=[float(rot[0]), float(rot[1]), float(rot[2])], angle=float(rot[3]))
 			except ZeroDivisionError:
-			    q = [0,0,0,1]
+			    q = [1,0,0,0]
 
 			q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
 
@@ -188,6 +192,8 @@ class Main():
 				xml = temp_xml
 			else:
 				#Gemerate output and cleanup output string.
+				# for child in self.output:
+				# 	print(ET.dump(child))
 				xml = ET.tostring(self.output)
 				xml = parseString(xml)
 				xml = xml.toprettyxml()
