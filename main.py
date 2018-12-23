@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from xml.dom.minidom import parse, parseString
+from lxml import etree
 from pyquaternion import Quaternion as quat
 from glob import glob
 import ctypes
@@ -30,7 +31,7 @@ class Main():
 		self.file_selected = []
 		self.output = {}
 		for elment_type in dicts.element_root_types:
-			self.output[elment_type] = ET.Element(elment_type)
+			self.output[elment_type] = ET.Element(elment_type+'s')
 
 	#For EXE error handling and questions.
 	def Mbox(self, title, text, style):
@@ -58,14 +59,14 @@ class Main():
 		self.Mbox("ERROR", "Error Code %s\n%s in file %s" % (code, error, file), 1)
 
 	#For injecting, we are connecting the parrent of the existing xml here.
-	def make_tree(file, mirror, output_file):
+	def inject_tree(self, file, mirror, output_file):
 		target = ET.parse(output_file)
 		target_root = target.getroot()
-		for key in self.output.keys():
-			target_parent = root.find('//%s' % str(key))
-			output[str(key)] = target_parent
+		self.output["root"] = target_root
+		for elment_type in dicts.element_root_types:
+			target_parent = target_root.findall('.//%s' % elment_type)
+			self.output[elment_type] = target_parent[0]
 		return self.make_tree(file, mirror)
-	
 	#Making tree from x3d 
 	def make_tree(self, file, mirror):
 		#parse input xml (x3d)
@@ -99,11 +100,22 @@ class Main():
 			result = elements.add_element(id, [x,y,z], q, self.output)
 
 
-	def string_output(self):
+	def string_output(self, inject):
+		if inject:
+			#THIS IS SO UGLY IT HURTS :<
+			#This here ALONE probably is more cost intensive then the rest combined
+			#This is the spagetti ball intangling all spagetti balls
+			parser = etree.XMLParser(remove_blank_text=True)
+			xml_string = ET.tostring(self.output["root"])
+			xml_string = etree.tostring(etree.XML(xml_string, parser=parser))
+			xml_string = parseString(xml_string)
+			xml_string = xml_string.toprettyxml()
+			return xml_string
+
 		combined_xml_string = ""
 		for key in self.output.keys():
 			header = str(key)
-			xml_string = ET.tostring(self.output[key])
+			xml_string = ET.tostring(self.output[header])
 			xml_string = parseString(xml_string)
 			xml_string = xml_string.toprettyxml()
 			combined_xml_string = "%s%s\n%s" % (combined_xml_string, header, xml_string)
@@ -152,12 +164,13 @@ class Main():
 			inject = file_obj[1][1]
 			if inject:
 				output_file = filedialog.askopenfilename(title = "Select where to inject " + file,filetypes = [("XML Files", ".xml")])
-				self.make_tree(file, mirror, output_file)
+				self.inject_tree(file, mirror, output_file)
+				file = output_file
 			else:
 				self.make_tree(file, mirror)
 				file = file[2:-4]
 				file = file + "_output.xml"
-			xml = self.string_output()
+			xml = self.string_output(inject)
 			print("%s output: \n%s" % (file, xml))
 			file = open(file,"w+")
 			file.write(xml)
