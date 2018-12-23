@@ -21,6 +21,7 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
   - Press start.
   - If you are injecting you will be asked for each file into what file you want to inject. Injected xml code will be injected after the last ```<connection></connection>``` element in the selected file.
   - If you are just outputting there will be %input%_output.xml files in the script root directory. Copy the content of this file over between ```<connections></connections>```
+  - Video tutorial (outdated) https://youtu.be/b8-ie1u05Lw
   
   </details>
 
