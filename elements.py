@@ -1,22 +1,20 @@
 import naming as name
 import xml.etree.ElementTree as ET
 
-def gen_element(id, location, rotation):
+def add_element(id, location, rotation, output):
 	if id == None:
 		return -8
 	if location == None or len(location) != 3:
 		return -3
 	if rotation == None or len(rotation) != 4:
 		return -4
-
-	#what are we building ?
 	if 'waypoint' in id:
 		el = Waypoint(id, location, rotation)
 	else:
 		el = Connection(id, location, rotation)
-	result = el.fill()
-	return result, el
-
+	el.fill()
+	el.add_to(output[el.element_id+'s'])
+	return 0
 
 #Superclass for all elements
 class Element:
@@ -42,7 +40,6 @@ class Element:
 	id 			= ""
 	#Split ID string
 	id_elements	= []
-
 
 	def __init__(self, id, location, rotation=None):
 		self.id = id

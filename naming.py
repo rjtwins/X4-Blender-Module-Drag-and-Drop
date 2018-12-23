@@ -89,3 +89,8 @@ name_dict = {
   "dock_xs" : "con_dock",
   "dockarea" : "con_dockarea"
 }
+
+element_root_types = [
+"waypoints",
+"connections"
+]

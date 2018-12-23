@@ -5,6 +5,7 @@ from glob import glob
 import ctypes
 from tkinter import filedialog, Tk, messagebox
 import elements as elements
+import naming as dicts
 
 
 # Error Handling via return codes
@@ -16,21 +17,27 @@ import elements as elements
 
 
 #As I kept adding stuff to this it became uglier and uglier, but still I hope whoever reads this can enjoy the spagetti ball in all its glory.
+#Need to remain this class for clarity!
 class Main():
-	root = Tk()
-	root.withdraw()
 	file_list = []
 	file_selected = []
 
-	#Current output buffer
-	output = None
+	#Current output buffer ?dict?
+	output = {}
+
+	def __init__(self):
+		self.file_list = []
+		self.file_selected = []
+		self.output = {}
+		for elment_type in dicts.element_root_types:
+			self.output[elment_type] = ET.Element(elment_type)
 
 	#For EXE error handling and questions.
 	def Mbox(self, title, text, style):
 		return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
-	def print_obj_atribs(obj):
-		print (', '.join("%s: %s" % item for item in vars(obj).items()))
+	def print_obj_atribs(self):
+		print (', '.join("%s: %s" % item for item in vars(self).items()))
 
 	def Error(self, code, file):
 		print("Error Code ", code, file)
@@ -50,46 +57,20 @@ class Main():
 		error = error_codes.get(code, "Error code not documented")
 		self.Mbox("ERROR", "Error Code %s\n%s in file %s" % (code, error, file), 1)
 
-	def outputdialog(self, file, raw_xml):
-		xml = None
-		try:
-			file = filedialog.askopenfilename(title = "Select where to inject " + file,filetypes = [("XML Files", ".xml")])
-			result, xml = self.override_xml(file, raw_xml)
-		except FileNotFoundError:
-			return -5, "", ""
-		except ET.ParseError:
-			return -6, "", ""
-		except AttributeError:
-			return -7, "", ""
-		return 0, file, xml
-
-	def override_xml(self, file, new_connections):
-		#tidy up new_connections cause ITS A MESS
-		new_connections = ET.tostring(new_connections)
-		new_connections = parseString(new_connections)
-		new_connections = new_connections.toprettyxml()
-		new_connections = ET.fromstring(new_connections)
-
-		xml = ET.parse(file)
-		root = xml.getroot()
-		connections = root.find('component/connections')
-
-		for child in new_connections:
-			connections.append(child)
-
-		xml = ET.tostring(root)
-		xml = parseString(xml)
-		xml = xml.toxml()
-		return 0, xml
-
-	#Read the input and generate connection nodes per read object.
+	#For injecting, we are connecting the parrent of the existing xml here.
+	def make_tree(file, mirror, output_file):
+		target = ET.parse(output_file)
+		target_root = target.getroot()
+		for key in self.output.keys():
+			target_parent = root.find('//%s' % str(key))
+			output[str(key)] = target_parent
+		return self.make_tree(file, mirror)
+	
+	#Making tree from x3d 
 	def make_tree(self, file, mirror):
 		#parse input xml (x3d)
 		tree = ET.parse(file)
 		root = tree.getroot()
-
-		#Generate xml for output
-		self.output = ET.Element("root")
 		
 		#For each node in the input with the tag 'Transform' parse to get the name, location and rotation.
 		#Translate rotation to ingame view and construct a connection node for the output.
@@ -103,16 +84,8 @@ class Main():
 			    q = [1,0,0,0]
 
 			q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
-
-			#Create an X4 element object and connect it to the output.
-			result, element = elements.gen_element(id, [x,y,z], q)
-
-			if result < 0:
-				return result
-			result = element.add_to(self.output)
-
-			if result != 0:
-				return result
+			#Create an X4 element object and connect it to the right output.
+			elements.add_element(id, [x,y,z], q, self.output)
 
 			if not mirror:
 				continue
@@ -123,15 +96,18 @@ class Main():
 			#Mirror
 			id, x, q = self.xmirror(id, x, q)
 
-			connection = con.Connection(id, [x,y,z], q)
-			result = connection.generate()
-			if result != 0:
-				return result
-			result = connection.add_to(self.output)
-			if result != 0:
-				return result
-		return 0
+			result = elements.add_element(id, [x,y,z], q, self.output)
 
+
+	def string_output(self):
+		combined_xml_string = ""
+		for key in self.output.keys():
+			header = str(key)
+			xml_string = ET.tostring(self.output[key])
+			xml_string = parseString(xml_string)
+			xml_string = xml_string.toprettyxml()
+			combined_xml_string = "%s%s\n%s" % (combined_xml_string, header, xml_string)
+		return combined_xml_string
 
 	#Parse a node from the input.
 	#Read information from relervant atributes and transform the location to ingame view.
@@ -159,49 +135,31 @@ class Main():
 
 	def select_files(self):
 		self.file_list = []
-		read_files = filedialog.askopenfilenames(parent=self.root,title='Choose a file',filetypes=[("X3D Files", ".x3d")])
+		read_files = filedialog.askopenfilenames(title='Choose a file',filetypes=[("X3D Files", ".x3d")])
 
 		if len(read_files) == 0:
 			read_files = []
 
 		for file in read_files:
 			self.file_list.append([file,[False,False]])
-		return 0
 
 	def process(self):
 		#For each file with the right extension process, make a tree and generate output.
 		#Store output in file with the origional name + _output.xml 
 		for file_obj in self.file_list:
-			result = 0
 			file = file_obj[0]
 			mirror = file_obj[1][0]
 			inject = file_obj[1][1]
-			result = self.make_tree(file, mirror)
-			if result != 0:
-				self.Error(result, file)
-				continue
-			xml = ""
-			file = file[2:-4]
-			file = file + "_output.xml"
 			if inject:
-				result, temp_file, temp_xml = self.outputdialog(file, self.output)
-				if result != 0:
-					self.Error(result, file)
-					continue
-				file = temp_file
-				xml = temp_xml
+				output_file = filedialog.askopenfilename(title = "Select where to inject " + file,filetypes = [("XML Files", ".xml")])
+				self.make_tree(file, mirror, output_file)
 			else:
-				#Gemerate output and cleanup output string.
-				# for child in self.output:
-				# 	print(ET.dump(child))
-				xml = ET.tostring(self.output)
-				xml = parseString(xml)
-				xml = xml.toprettyxml()
-				xml = xml.replace('</root>', "").replace('<root>', "").replace('<?xml version="1.0" ?>',"")
-				xml = xml[2:-2]
+				self.make_tree(file, mirror)
+				file = file[2:-4]
+				file = file + "_output.xml"
+			xml = self.string_output()
 			print("%s output: \n%s" % (file, xml))
 			file = open(file,"w+")
 			file.write(xml)
 			file.close()
 		self.Mbox("Done","",1)
-		return 0
