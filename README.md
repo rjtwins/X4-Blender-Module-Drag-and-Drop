@@ -25,20 +25,41 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
   
   </details>
 
-### Limitation
+### Details on specific Modules and Elements
 <details>
   <summary>Click to expand</summary>
-  
+
+#### Generic Elements
+  - Generic elements can be placed down to get their location and orientation.
+  - They will apear as ```con_generic_generic_nr``` under ```<connections></connections>```
+
 #### Engines:
   - Engines can only face backwards.
   - You can only ever have one engine size on each ship, aka no mixing of L and XL engines.
   - Engines behave weirdly when not in one group together
  
 #### Shields:
-
   - When in a group will only shield components in group and not the ship as a whole.
   - When not in a group will shield ship.
+
+#### Strorage
+  - storage and ship storage (for storing fighter/corvette/frigate) modules indicate the location for internal(as far as I can tell invisible) ship and cargo storage. 
+  - The connection point they indicate needs to be assgined to a storage component macro in the ship marco.
+
+### Waypoints
+  - Waypoints are for "mass trafic" moving (also for docking path of small ships I suspect).
+  - There are 4 types of waypoints, waypoints, start dock waypoints, end dock waypoints and close link waypoints.
+  - If not injected waypoints are stored in the output file under ```<waypoints></waypoints>```.
+
+### Playercontroll/Cockpits
+  - There are several indicators of playercontroll (camera location?), ai movement points, teleporter indicator, cockpit indicator ect.
+  - Currently only playercontroll and the cockpit location are supported.
   
+#### Docking areas
+  - There are two types of docking areas, NOTE: I think these areas do not indicate the location of the docking mesh, rather the location of where the ship lands?
+  - Currently (and as far as I can tell all ship to ship docking indicators) the dock xs for masstrafic and dockingarea for other ships are supported.
+  - Launchtubes are also supported.
+
   </details>
   
 ### Naming Scheme
@@ -72,21 +93,51 @@ funcannongroup-1_mturret_666
   
 ```
 Supported modules (m indicates missile capable turret)
-lturret
-lmturret	
-mturret
-mmturret
-sturret
-ssturret
-xlshield
-lshield
-mshield
-sshield
-xlengine
-lengine
-mengine
-sengine
-counter (countermeasures)
+#Generic
+"generic"
+ 
+#Turrets 
+"lturret"
+ "lmturret"
+"mturret"
+"mmturret"
+"sturret"
+"smturret"
+#Shields
+
+"xlshield"
+"lshield"
+"mshield"
+"sshield"
+#Engines
+"xlengine"
+"lengine"
+"mengine"
+"sengine"
+#Countermeasures
+"counter"
+#Fixed weapons 
+"lweap"
+"mweap"
+"sweap"
+"lmweap"
+"mmweap"
+"smweap"
+#Waypoints
+"stawaypoint"
+"endwaypoint"
+"waypoint"
+"clowaypoint"
+#Player controll/cockpit
+"playerctrl"
+"cockpit":
+#Storage modules
+"storage" :
+"shipstorage"
+#Docking
+"dock_xs"
+"dockarea"
+"launchtube"
 ```
 </details>
 
