@@ -154,3 +154,8 @@ Supported modules (m indicates missile capable turret)
     - pyquaternion http://kieranwynn.github.io/pyquaternion/
     
 </details>
+
+### Currently working on:
+  - Proper docking
+  - More player and AI controll elements (aka cockpit locations, betty sound origion ect.).
+  - XML and XMF intergration (long term goal).
