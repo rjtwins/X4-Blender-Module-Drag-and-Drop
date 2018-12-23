@@ -4,7 +4,7 @@ from pyquaternion import Quaternion as quat
 from glob import glob
 import ctypes
 from tkinter import filedialog, Tk, messagebox
-import connection as con
+import elements as elements
 
 
 # Error Handling via return codes
@@ -38,7 +38,10 @@ class Main():
 			-4: "Incorrect number of rotational components.",
 			-5: "Failed to open file selected for injection or file not present.",
 			-6:	"The file you selected to inject into could not be parsed.",
-			-7: "The file you selected to inject into has no <connections></connections> node."
+			-7: "The file you selected to inject into has no <connections></connections> node.",
+			-8: "Supplied object id was None.",
+			-99: "Method faied to return or returned None."
+
 		}
 		error = error_codes.get(code, "Error code not documented")
 		self.Mbox("ERROR", "Error Code %s\n%s in file %s" % (code, error, file), 1)
@@ -80,6 +83,7 @@ class Main():
 		#parse input xml (x3d)
 		tree = ET.parse(file)
 		root = tree.getroot()
+
 		#Generate xml for output
 		self.output = ET.Element("root")
 		
@@ -96,19 +100,20 @@ class Main():
 
 			q = [q[0]*-1,q[1]*-1,q[3],q[2]*-1]
 
-			#Create an X4 component connection object and connect it to the output.
-			connection = con.Connection(id, [x,y,z], q)
-			result = connection.generate()
-			if result != 0:
+			#Create an X4 element object and connect it to the output.
+			result, element = elements.gen_element(id, [x,y,z], q)
+
+			if result < 0:
 				return result
-			result = connection.add_to(self.output)
+			result = element.add_to(self.output)
+
 			if result != 0:
 				return result
 
 			if not mirror:
 				continue
 
-			if 'center' in id:
+			if not 'left' in id and not 'right' in id:
 				continue
 
 			#Mirror
@@ -188,6 +193,7 @@ class Main():
 				xml = xml.toprettyxml()
 				xml = xml.replace('</root>', "").replace('<root>', "").replace('<?xml version="1.0" ?>',"")
 				xml = xml[2:-2]
+			print("%s output: \n%s" % (file, xml))
 			file = open(file,"w+")
 			file.write(xml)
 			file.close()

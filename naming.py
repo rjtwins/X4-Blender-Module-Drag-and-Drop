@@ -15,7 +15,11 @@ tag_dict =	{
   "lengine": 	"engine large",
   "mengine": 	"engine medium",
   "sengine": 	"engine small",
-  "counter":  "countermeasures"
+  "counter":  "countermeasures",
+  "str-mas-waypoint" : "sizeLevel1 typedock start dynamicmasstraffic",
+  "end-mas-waypoint" : "sizeLevel1 typedock end dynamicmasstraffic",
+  "std-mas-waypoint" : "typenormal sizeLevel1 dynamicmasstraffic",
+  "clo-mas-waypoint" : "typenormal sizeLevel1 dynamicmasstraffic closelink"
 }
 
 name_dict = {
