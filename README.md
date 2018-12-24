@@ -56,13 +56,45 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
 #### Playercontroll/Cockpits
   - There are several indicators of playercontroll (camera location?), ai movement points, teleporter indicator, cockpit indicator ect.
   - Currently only playercontroll and the cockpit location are supported.
+  - The connection point they indicate needs to be assgined to a cockpid component macro in the ship marco.
   
 #### Docking areas
-  - There are two types of docking areas, NOTE: I think these areas do not indicate the location of the docking mesh, rather the location of where the ship lands?
-  - Currently (and as far as I can tell all ship to ship docking indicators) the dock xs for masstrafic and dockingarea for other ships are supported.
-  - Launchtubes are also supported.
+  - For dockarea and launchtube, the connection points indicated need to also be assgined a macro in the ships macro.
+  
+</details>
 
-  </details>
+### Assigning things in the ships macro
+<details>
+  <summary>Click to expand</summary> 
+  
+  Some elements need to also be assgined a macro that will attach here, this includes but is not limited to.
+    - Cockpids
+    - Dockareas
+    - Storage and ship storage
+    
+  Now lets say we have made a connection as follows:
+  ```
+	<connection name="con_dockarea_dockarea_1" tags="dockarea">
+		<offset>
+			<position x="-20" y="30" z="120"/>
+			<quaternion qw="1.7320510330969933e-07" qx="0.003661001092863849" qy="0.0" qz="-0.999993298513029"/>
+		</offset>
+	</connection>
+  ```
+  To actually have a dock apear at that location and rotation we need to assign it a dock marco (aka what object will spawn there) in the ships macro file.
+  This will look like the following and must be located between ```<connections></connections>```:
+  
+  ```IN SHIP MACRO FILE      
+  <connection ref="con_dockarea_dockarea_1">
+        <macro ref="dockarea_arg_s_ship_01_macro" connection="Connection01" />
+  </connection>
+  ```
+  Here 
+    - ```con_dockarea_dockarea_1``` indicates the connection we specified in above.
+    - ```dockarea_arg_s_ship_01_macro``` is the macro of the object that is going to be spawned here.
+    - ```Connection01``` is the connection point in the objects macro at witch it attaches to our connection point.
+
+</details>
   
 ### Naming Scheme
 <details>
