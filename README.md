@@ -31,7 +31,7 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
 
 #### Generic Elements
   - Generic elements can be placed down to get their location and orientation.
-  - They will apear as ```con_generic_generic_nr``` under ```<connections></connections>```
+  - They will appear as ```con_generic_generic_nr``` under ```<connections></connections>```
 
 #### Engines:
   - Engines can only face backwards.
@@ -42,12 +42,12 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
   - When in a group will only shield components in group and not the ship as a whole.
   - When not in a group will shield ship.
 
-#### Strorage
+#### Storage
   - storage and ship storage (for storing fighter/corvette/frigate) modules indicate the location for internal(as far as I can tell invisible) ship and cargo storage. 
-  - The connection point they indicate needs to be assgined to a storage component macro in the ship marco.
+  - The connection point they indicate needs to be assigned to a storage component macro in the ship macro.
 
 #### Waypoints
-  - Waypoints are for "mass trafic" moving (also for docking path of small ships I suspect).
+  - Waypoints are for "mass traffic" moving (also for docking path of small ships I suspect).
   - There are 4 types of waypoints, waypoints, start dock waypoints, end dock waypoints and close link waypoints.
   - If not injected waypoints are stored in the output file under ```<waypoints></waypoints>```.
   - Waypoints can have links to other waypoints. Links are indicated as numbers behind the type element in the naming schema.
@@ -56,10 +56,10 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
 #### Playercontroll/Cockpits
   - There are several indicators of playercontroll (camera location?), ai movement points, teleporter indicator, cockpit indicator ect.
   - Currently only playercontroll and the cockpit location are supported.
-  - The connection point they indicate needs to be assgined to a cockpid component macro in the ship marco.
+  - The connection point they indicate needs to be assigned to a cockpit component macro in the ship macro.
   
 #### Docking areas
-  - For dockarea and launchtube, the connection points indicated need to also be assgined a macro in the ships macro.
+  - For dock-area and launch-tube, the connection points indicated need to also be assigned a macro in the ships macro.
   
 </details>
 
@@ -67,9 +67,9 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
 <details>
   <summary>Click to expand</summary> 
   
-  Some elements need to also be assgined a macro that will attach here, this includes but is not limited to.
-    - Cockpids
-    - Dockareas
+  Some elements need to also be assigned a macro that will attach to it, this includes but is not limited to.
+    - Cockpits
+    - Dock-areas
     - Storage and ship storage
     
   Now lets say we have made a connection as follows:
@@ -81,7 +81,7 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
 		</offset>
 	</connection>
   ```
-  To actually have a dock apear at that location and rotation we need to assign it a dock marco (aka what object will spawn there) in the ships macro file.
+  To actually have a dock appear at that location and rotation we need to assign it a dock macro (aka what object will spawn there) in the ships macro file.
   This will look like the following and must be located between ```<connections></connections>```:
   
   ```IN SHIP MACRO FILE      
