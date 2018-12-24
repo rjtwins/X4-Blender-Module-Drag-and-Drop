@@ -42,7 +42,8 @@ tag_dict =	{
   "storage" : "storage",
 #Dockging
   "dock_xs" : "dock_xs",
-  "dockarea" : "dockarea"
+  "dockarea" : "dockarea",
+  "launchtube" : "dockingbay"
 }
 
 name_dict = {
@@ -87,7 +88,8 @@ name_dict = {
   "shipstorage" : "con_shipstorage",
 #Docking
   "dock_xs" : "con_dock",
-  "dockarea" : "con_dockarea"
+  "dockarea" : "con_dockarea",
+  "launchtube" : "con_launchtube"
 }
 
 element_root_types = [
