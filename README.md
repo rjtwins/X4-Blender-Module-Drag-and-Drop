@@ -50,6 +50,8 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
   - Waypoints are for "mass trafic" moving (also for docking path of small ships I suspect).
   - There are 4 types of waypoints, waypoints, start dock waypoints, end dock waypoints and close link waypoints.
   - If not injected waypoints are stored in the output file under ```<waypoints></waypoints>```.
+  - Waypoints can have links to other waypoints. Links are indicated as numbers behind the type element in the naming schema.
+  - Example: ```waypoing-2-3-4-5_1``` indicates waypoint 1 linked to waypoint 2,3,4 and 5.
 
 #### Playercontroll/Cockpits
   - There are several indicators of playercontroll (camera location?), ai movement points, teleporter indicator, cockpit indicator ect.
