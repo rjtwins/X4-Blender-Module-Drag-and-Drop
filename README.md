@@ -46,12 +46,12 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
   - storage and ship storage (for storing fighter/corvette/frigate) modules indicate the location for internal(as far as I can tell invisible) ship and cargo storage. 
   - The connection point they indicate needs to be assgined to a storage component macro in the ship marco.
 
-### Waypoints
+#### Waypoints
   - Waypoints are for "mass trafic" moving (also for docking path of small ships I suspect).
   - There are 4 types of waypoints, waypoints, start dock waypoints, end dock waypoints and close link waypoints.
   - If not injected waypoints are stored in the output file under ```<waypoints></waypoints>```.
 
-### Playercontroll/Cockpits
+#### Playercontroll/Cockpits
   - There are several indicators of playercontroll (camera location?), ai movement points, teleporter indicator, cockpit indicator ect.
   - Currently only playercontroll and the cockpit location are supported.
   
