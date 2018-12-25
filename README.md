@@ -70,6 +70,9 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
   - Fixed weapons (like engines) cannot have a rotation and will always point forward even if you indicate one.
   - Fixed weapons MUST NOT be in a group.
   - TODO: Text fixed weapon size mixing.
+  - There seem to be some naming restrictions regarding fixed weapons, for example
+  the large weapons MUST be named ```con_weap_nr```.
+  - TODO: Find restrictions on m and s weapons.
   
 </details>
 
