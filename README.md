@@ -61,6 +61,16 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
 #### Docking areas
   - For dock-area and launch-tube, the connection points indicated need to also be assigned a macro in the ships macro.
   
+#### Turrets
+  - Turrets can be placed down however you like.
+  - Prevent mixing of diffrent size turrets in the same group.
+  - Turrets can be mixed with engines and or shields
+  
+#### Fixed Weapons
+  - Fixed weapons (like engines) cannot have a rotation and will always point forward even if you indicate one.
+  - Fixed weapons MUST NOT be in a group.
+  - TODO: Text fixed weapon size mixing.
+  
 </details>
 
 ### Assigning things in the ships macro
