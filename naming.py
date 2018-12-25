@@ -1,4 +1,8 @@
 #naming scheme
+#TODO: Combine into one dict
+
+
+
 #Cotains names and associated tags
 tag_dict =	{
 #generic
@@ -72,7 +76,7 @@ name_dict = {
   "lweap" : "con_l_yweapon",
   "mweap" : "con_m_weapon",
   "sweap" : "con_s_weapon",
-  "lmweap" : "con_lm_yweapon",
+  "lmweap" : "con_lm_weapon",
   "mmweap" : "con_mm_weapon",
   "smweap" : "con_sm_weapon",
 #Waypoints

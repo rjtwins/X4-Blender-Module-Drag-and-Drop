@@ -128,7 +128,8 @@ class Connection(Element):
 		return 0
 		
 	def process(self):
-		if 'engine' in self.con_type:
+		#Get a list here to reference against.
+		if 'engine' in self.con_type or 'lweap' in self.con_type:
 			#TODO CONFIRM CORRECT ROTATION
 			self.rotation = [0,0,0,0]
 		result = super().process()
