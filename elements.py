@@ -182,3 +182,7 @@ class Waypoint(Element):
 		for link_nr in self.links:
 			ET.SubElement(self.element.find("links"), "link", ref="%s%s" % (self.con_name, link_nr))
 		return 0
+
+
+#TODO:
+#Add lights (omi and box)
