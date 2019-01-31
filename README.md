@@ -31,7 +31,7 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
 
 #### Generic Elements
   - Generic elements can be placed down to get their location and orientation.
-  - They will apear as ```con_generic_generic_nr``` under ```<connections></connections>```
+  - They will appear as ```con_generic_generic_nr``` under ```<connections></connections>```
 
 #### Engines:
   - Engines can only face backwards.
@@ -42,25 +42,72 @@ WARNING: Included EXE will be out of date from time to time, to ensure you have 
   - When in a group will only shield components in group and not the ship as a whole.
   - When not in a group will shield ship.
 
-#### Strorage
+#### Storage
   - storage and ship storage (for storing fighter/corvette/frigate) modules indicate the location for internal(as far as I can tell invisible) ship and cargo storage. 
-  - The connection point they indicate needs to be assgined to a storage component macro in the ship marco.
+  - The connection point they indicate needs to be assigned to a storage component macro in the ship macro.
 
-### Waypoints
-  - Waypoints are for "mass trafic" moving (also for docking path of small ships I suspect).
+#### Waypoints
+  - Waypoints are for "mass traffic" moving (also for docking path of small ships I suspect).
   - There are 4 types of waypoints, waypoints, start dock waypoints, end dock waypoints and close link waypoints.
   - If not injected waypoints are stored in the output file under ```<waypoints></waypoints>```.
+  - Waypoints can have links to other waypoints. Links are indicated as numbers behind the type element in the naming schema.
+  - Example: ```waypoing-2-3-4-5_1``` indicates waypoint 1 linked to waypoint 2,3,4 and 5.
 
-### Playercontroll/Cockpits
+#### Playercontroll/Cockpits
   - There are several indicators of playercontroll (camera location?), ai movement points, teleporter indicator, cockpit indicator ect.
   - Currently only playercontroll and the cockpit location are supported.
+  - The connection point they indicate needs to be assigned to a cockpit component macro in the ship macro.
   
 #### Docking areas
-  - There are two types of docking areas, NOTE: I think these areas do not indicate the location of the docking mesh, rather the location of where the ship lands?
-  - Currently (and as far as I can tell all ship to ship docking indicators) the dock xs for masstrafic and dockingarea for other ships are supported.
-  - Launchtubes are also supported.
+  - For dock-area and launch-tube, the connection points indicated need to also be assigned a macro in the ships macro.
+  
+#### Turrets
+  - Turrets can be placed down however you like.
+  - Prevent mixing of diffrent size turrets in the same group.
+  - Turrets can be mixed with engines and or shields
+  
+#### Fixed Weapons
+  - Fixed weapons (like engines) cannot have a rotation and will always point forward even if you indicate one.
+  - Fixed weapons MUST NOT be in a group.
+  - TODO: Text fixed weapon size mixing.
+  - There seem to be some naming restrictions regarding fixed weapons, for example
+  the large weapons MUST be named ```con_weap_nr```.
+  - TODO: Find restrictions on m and s weapons.
+  
+</details>
 
-  </details>
+### Assigning things in the ships macro
+<details>
+  <summary>Click to expand</summary> 
+  
+  Some elements need to also be assigned a macro that will attach to it, this includes but is not limited to.
+    - Cockpits
+    - Dock-areas
+    - Storage and ship storage
+    
+  Now lets say we have made a connection as follows:
+  ```
+	<connection name="con_dockarea_dockarea_1" tags="dockarea">
+		<offset>
+			<position x="-20" y="30" z="120"/>
+			<quaternion qw="1.7320510330969933e-07" qx="0.003661001092863849" qy="0.0" qz="-0.999993298513029"/>
+		</offset>
+	</connection>
+  ```
+  To actually have a dock appear at that location and rotation we need to assign it a dock macro (aka what object will spawn there) in the ships macro file.
+  This will look like the following and must be located between ```<connections></connections>```:
+  
+  ```IN SHIP MACRO FILE      
+  <connection ref="con_dockarea_dockarea_1">
+        <macro ref="dockarea_arg_s_ship_01_macro" connection="Connection01" />
+  </connection>
+  ```
+  Here 
+    - ```con_dockarea_dockarea_1``` indicates the connection we specified in above.
+    - ```dockarea_arg_s_ship_01_macro``` is the macro of the object that is going to be spawned here.
+    - ```Connection01``` is the connection point in the objects macro at witch it attaches to our connection point.
+
+</details>
   
 ### Naming Scheme
 <details>
@@ -156,6 +203,7 @@ Supported modules (m indicates missile capable turret)
 </details>
 
 ### Currently working on:
+  - Injecting stuff into the ships macro for ease of use.
   - Proper docking
   - More player and AI controll elements (aka cockpit locations, betty sound origion ect.).
   - XML and XMF intergration (long term goal).
