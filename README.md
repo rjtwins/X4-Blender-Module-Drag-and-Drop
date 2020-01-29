@@ -205,5 +205,5 @@ Supported modules (m indicates missile capable turret)
 ### Currently working on:
   - Injecting stuff into the ships macro for ease of use.
   - Proper docking
-  - More player and AI controll elements (aka cockpit locations, betty sound origion ect.).
+  - More player and AI controll elements (aka cockpit locations, betty sound origin ect.).
   - XML and XMF intergration (long term goal).
